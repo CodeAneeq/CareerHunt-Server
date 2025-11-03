@@ -9,7 +9,7 @@ import cors from 'cors'
 
 const app = express();
 app.use(cors({
-  origin: 'https://careeerhunt.netlify.app'  // <-- frontend URL sahi likho yahan
+  origin: 'https://careeer-hunt.netlify.app'  // <-- frontend URL sahi likho yahan
 }));
 app.use(express.json());
 connectDB(Constants.DB_URI);
