@@ -10,7 +10,7 @@ import cors from 'cors'
 const app = express();
 // app.use(cors({origin: "https://careeerhunt.netlify.app"}));
 app.use(cors({
-  origin: ["https://careeerhunt.netlify.app"],
+  origin: ["https://careeerhunt.netlify.app/"],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], 
   credentials: true
 }));
