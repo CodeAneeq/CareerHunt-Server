@@ -8,12 +8,12 @@ import applicationRoutes from  './routes/application-routes.js'
 import cors from 'cors'
 
 const app = express();
-// app.use(cors({origin: "https://careeerhunt.netlify.app"}));
-app.use(cors({
-  origin: ["https://careeerhunt.netlify.app/", "https://careeer-hunt.netlify.app", "https://careeer-hunt.netlify.app/"],
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], 
-  credentials: true
-}));
+app.use(cors());
+// app.use(cors({
+//   origin: ["https://careeerhunt.netlify.app/", "https://careeer-hunt.netlify.app", "https://careeer-hunt.netlify.app/"],
+//   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], 
+//   credentials: true
+// }));
 
 app.use(express.json());
 connectDB(Constants.DB_URI);

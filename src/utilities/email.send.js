@@ -4,7 +4,7 @@ import Constants from "../constant.js";
 async function sendMail({email= [], subject="", html=""}) {
   const info = await transporter.sendMail({
     from: Constants.EMAIL_FR0M,
-    to: email.join(", "),
+    to: email,
     subject: subject,
     html: html, 
   });

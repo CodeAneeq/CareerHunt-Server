@@ -1,38 +1,7 @@
 import { applicationModel } from "../models/application-schema.js";
 import { jobModel } from "../models/job-schema.js";
-
-// const createApplication = async (req, res) => {
-//  try {
-//     let user = req.user;
-//     let { jobId } = req.body
-//     if (!jobId) {
-//         return res.status(400).json({status: "failed", message: "Job iD is required"});
-//     }
-//     const job = await jobModel.findById(jobId);
-//     if (!job) {
-//       return res.status(404).json({
-//         status: "failed",
-//         message: "Job not found",
-//       });
-//     }
-//     const alreadyApplied = await applicationModel.findOne({userId: user._id});
-//     if (alreadyApplied) {
-//         return res.status(400).json({status: "failed", message: "Already Applied"});
-//     }
-//     let nowDate = new Date().toISOString().split("T")[0];
-//     let application = applicationModel({
-//         resumeLink: user.profile.resume,
-//         jobId,
-//         userId: user._id,
-//         appliedAt: nowDate
-//     })
-//     await application.save();
-//     res.status(201).json({status: "success", message: "Application Created", data: application});
-//  } catch (error) {
-//      console.log(error);
-//      res.status(500).json({status: "failed", message: "Internal Server Error"});
-//  }   
-// }
+import { userModel } from "../models/user-schema.js";
+import sendMail from "../utilities/email.send.js";
 
 const createApplication = async (req, res) => {
   try {
@@ -64,6 +33,15 @@ const createApplication = async (req, res) => {
     });
 
     await application.save();
+
+    await sendMail({
+      email: user.email,
+      subject: `${job.title}`,
+      html: `
+      <h1>Job Applied Successfully</h1>
+      <p>Job Title ${job.title}</p>
+     `
+    })
 
     res.status(201).json({ status: "success", message: "Application Created", data: application });
   } catch (error) {
@@ -101,7 +79,15 @@ const changeStatus = async (req, res) => {
     if (!application) {
         return res.status(404).json({status: "failed", message: "No application found"});
     }
-
+    let user = await userModel.findById(application.userId);
+    await sendMail({
+      email: user.email,
+      subject: `${job.title}`,
+      html: `
+      <h1>Job Application Result</h1>
+      <p>The Result is ${status}</p>
+     `
+    })
     res.status(200).json({status: "success", message: "Status changed successfully", data: application})
  } catch (error) {
      console.log(error);
